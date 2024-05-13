@@ -14,29 +14,17 @@ java {
 }
 
 publishing {
-    repositories {
-        maven {
-            name = "maven-deploy"
-            url = uri(
-                System.getenv("MAVEN_DEPLOY_URL") ?: "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-            )
-            credentials {
-                username = System.getenv("MAVEN_DEPLOY_USERNAME") ?: "username"
-                password = System.getenv("MAVEN_DEPLOY_PASSWORD") ?: "password"
-            }
-        }
-    }
     publications {
         create<MavenPublication>("maven") {
             from(components["java"])
             pom {
                 packaging = "jar"
-                url.set("https://github.com/CloudburstMC/fastutil")
+                url.set("https://github.com/rfresh2/fastutil")
 
                 scm {
-                    connection.set("scm:git:git://github.com/CloudburstMC/fastutil.git")
-                    developerConnection.set("scm:git:ssh://github.com/CloudburstMC/fastutil.git")
-                    url.set("https://github.com/CloudburstMC/fastutil")
+                    connection.set("scm:git:git://github.com/rfresh2/fastutil.git")
+                    developerConnection.set("scm:git:ssh://github.com/rfresh2/fastutil.git")
+                    url.set("https://github.com/rfresh2/fastutil")
                 }
 
                 licenses {
@@ -48,20 +36,13 @@ publishing {
 
                 developers {
                     developer {
-                        name.set("CloudburstMC Team")
-                        organization.set("CloudburstMC")
-                        organizationUrl.set("https://github.com/CloudburstMC")
+                        name.set("rfresh2")
+                        organization.set("rfresh2")
+                        organizationUrl.set("https://github.com/rfresh2")
                     }
                 }
             }
         }
-    }
-}
-
-signing {
-    if (System.getenv("PGP_SECRET") != null && System.getenv("PGP_PASSPHRASE") != null) {
-        useInMemoryPgpKeys(System.getenv("PGP_SECRET"), System.getenv("PGP_PASSPHRASE"))
-        sign(publishing.publications["maven"])
     }
 }
 
