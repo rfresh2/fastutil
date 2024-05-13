@@ -1,8 +1,13 @@
+8.5.14
+
+- Potential improvements by array caching thanks to mouse0w0@github.com.
+
 8.5.13
 
 - Thanks to Chanoch Goldfeder for fixing a number of bugs in ImmutableList.
 
-- Thanks to Barak Ugav for implementing a faster ArrayList.removeIf().
+- Thanks to Barak Ugav for implementing a faster ArrayList.removeIf() and
+  fixing a bug in back().
 
 8.5.12
 
