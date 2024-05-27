@@ -1,7 +1,7 @@
 subprojects {
     apply(plugin = "fastutil")
 
-    group = "org.cloudburstmc.fastutil.queues"
+    group = "com.github.rfresh2.fastutil.queues"
 
     val type = project.getType()
     val pkg = type.packagePath()

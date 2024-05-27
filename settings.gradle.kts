@@ -11,7 +11,7 @@ pluginManagement {
 }
 
 plugins {
-    id("org.cloudburstmc.fastutil-plugin")
+    id("com.github.rfresh2.fastutil-plugin")
 }
 
 fun addModule(name: String) {

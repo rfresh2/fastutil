@@ -1,7 +1,7 @@
 subprojects {
     apply(plugin = "fastutil")
 
-    group = "org.cloudburstmc.fastutil.maps"
+    group = "com.github.rfresh2.fastutil.maps"
 
     val (key, value) = project.getMapTypes()
 
