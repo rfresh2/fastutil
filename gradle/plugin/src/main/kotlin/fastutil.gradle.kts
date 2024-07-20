@@ -14,9 +14,26 @@ java {
 }
 
 publishing {
+    repositories {
+        maven {
+            name = "vc"
+            url = uri("https://maven.2b2t.vc/releases")
+            credentials {
+                username = System.getenv("MAVEN_USERNAME")
+                password = System.getenv("MAVEN_PASSWORD")
+            }
+            authentication {
+                create<BasicAuthentication>("basic")
+            }
+        }
+    }
     publications {
         create<MavenPublication>("maven") {
             from(components["java"])
+            version = project.version.toString()
+            System.getenv("PUBLISH_VERSION")?.let {
+                version = it
+            }
             pom {
                 packaging = "jar"
                 url.set("https://github.com/rfresh2/fastutil")
