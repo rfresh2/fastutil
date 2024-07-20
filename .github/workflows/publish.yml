@@ -1,9 +1,8 @@
 name: fastutil Publish
 
 on:
-    push:
-        branches:
-            - "develop"
+    workflow_dispatch:
+
 env:
   GRADLE_OPTS: "-Dorg.gradle.parallel=true -Dorg.gradle.daemon=false -Dorg.gradle.caching=true -Dorg.gradle.welcome=never"
 
@@ -37,5 +36,4 @@ jobs:
               env:
                   MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}
                   MAVEN_PASSWORD: ${{ secrets.MAVEN_PASSWORD }}
-                  PUBLISH_VERSION: "8.5.14.${{ github.run_number }}"
               run: ./gradlew build publishMavenPublicationToVcRepository
