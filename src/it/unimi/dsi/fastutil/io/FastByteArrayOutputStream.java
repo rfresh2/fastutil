@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2005-2024 Sebastiano Vigna
+ * Copyright (C) 2005-2025 Sebastiano Vigna
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 
 package it.unimi.dsi.fastutil.io;
 
-import java.io.IOException;
-
 import it.unimi.dsi.fastutil.bytes.ByteArrays;
 
 /** Simple, fast byte-array output stream that exposes the backing array.
@@ -32,7 +30,6 @@ import it.unimi.dsi.fastutil.bytes.ByteArrays;
  *
  * @author Sebastiano Vigna
  */
-
 public class FastByteArrayOutputStream extends MeasurableOutputStream implements RepositionableStream {
 
 	/** The array backing the output stream. */
@@ -87,7 +84,7 @@ public class FastByteArrayOutputStream extends MeasurableOutputStream implements
 	}
 
 	@Override
-	public void write(final byte[] b, final int off, final int len) throws IOException {
+	public void write(final byte[] b, final int off, final int len) {
 		ByteArrays.ensureOffsetLength(b, off, len);
 		if (position + len > array.length) array = ByteArrays.grow(array, position + len, position);
 		System.arraycopy(b, off, array, position, len);
@@ -96,7 +93,7 @@ public class FastByteArrayOutputStream extends MeasurableOutputStream implements
 
 	@Override
 	public void position(final long newPosition) {
-		if (position > Integer.MAX_VALUE) throw new IllegalArgumentException("Position too large: " + newPosition);
+		if (newPosition > Integer.MAX_VALUE) throw new IllegalArgumentException("Position too large: " + newPosition);
 		position = (int)newPosition;
 	}
 
@@ -106,7 +103,23 @@ public class FastByteArrayOutputStream extends MeasurableOutputStream implements
 	}
 
 	@Override
-	public long length() throws IOException {
+	public long length() {
 		return length;
+	}
+
+	/** @see java.io.ByteArrayOutputStream#toByteArray() */
+	public byte[] toByteArray () {
+		return ByteArrays.copy(array, 0, length);
+	}
+
+	@Override
+	public void close () {
+		// NOP: only to force no exception
+	}
+
+	@Override
+	public void write(final byte[] b) {
+		// Only to force no exception
+		write(b, 0, b.length);
 	}
 }
