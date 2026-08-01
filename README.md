@@ -25,7 +25,17 @@ Split up the fat release jar into smaller type and data structure based modules.
 
 Each module is published as separate maven coordinates.
 
-for example: `com.github.rfresh.fastutil.maps:int-object-maps:8.5.19`
+For example: `com.github.rfresh2.fastutil.maps:int-object-maps:8.5.19`
+
+The `fastutil-bom` platform supplies a consistent version for every module, so
+consumers only need to declare the version once:
+
+```kotlin
+dependencies {
+    api(platform("com.github.rfresh2.fastutil:fastutil-bom:8.5.19"))
+    api("com.github.rfresh2.fastutil.maps:object-object-maps")
+}
+```
 
 These modules are compiled and published with gradle (instead of ant)
 

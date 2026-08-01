@@ -20,6 +20,7 @@ fun addModule(name: String) {
 }
 
 
+addModule("fastutil-bom")
 addModule("core")
 addModule("io")
 include(":tests")
@@ -38,4 +39,3 @@ for (type in Type.TYPES) {
         }
     }
 }
-
