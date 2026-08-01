@@ -75,4 +75,13 @@ tasks.test {
 
 tasks.compileJava {
     options.encoding = Charsets.UTF_8.name();
+    dependsOn(rootProject.tasks.named("generateFastutilSources"))
+}
+
+tasks.javadoc {
+    dependsOn(rootProject.tasks.named("generateFastutilSources"))
+}
+
+tasks.named("sourcesJar") {
+    dependsOn(rootProject.tasks.named("generateFastutilSources"))
 }

@@ -28,9 +28,6 @@ jobs:
         with:
           dependency-graph: generate-and-submit
 
-      - name: Make
-        run: make sources
-
       - name: Publish
         env:
           MAVEN_USERNAME: ${{ secrets.MAVEN_USERNAME }}

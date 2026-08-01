@@ -13,8 +13,7 @@ dependencies {
 
 sourceSets.main {
     java {
-        srcDirs.clear()
-        srcDirs(rootProject.rootDir.resolve("src"))
+        setSrcDirs(getFastutilSourceDirs())
 
         include(
             "$PKG/io/*.java",

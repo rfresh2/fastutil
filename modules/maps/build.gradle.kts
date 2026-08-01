@@ -17,8 +17,7 @@ subprojects {
 
     configure<SourceSetContainer> {
         get("main").java {
-            srcDirs.clear()
-            srcDirs(rootProject.rootDir.resolve("src"))
+            setSrcDirs(getFastutilSourceDirs())
 
             include(
                 "$pkg/Abstract${cType}2${valCType}*Map.java",

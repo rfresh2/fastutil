@@ -13,8 +13,7 @@ subprojects {
 
     configure<SourceSetContainer> {
         get("main").java {
-            srcDirs.clear()
-            srcDirs(rootProject.rootDir.resolve("src"))
+            setSrcDirs(getFastutilSourceDirs())
 
             include(
                 // Unsorted

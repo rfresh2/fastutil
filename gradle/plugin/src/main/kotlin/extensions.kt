@@ -2,6 +2,11 @@ import org.gradle.api.Project
 
 const val PKG = "it/unimi/dsi/fastutil"
 
+fun Project.getFastutilSourceDirs(): List<Any> = listOf(
+    rootProject.rootDir.resolve("src"),
+    rootProject.layout.buildDirectory.dir("generated/sources/fastutil/src")
+)
+
 fun Project.getType(): Type {
     val name = this.name.split("-")[0]
 
