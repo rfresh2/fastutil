@@ -12,6 +12,7 @@ pluginManagement {
 
 plugins {
     id("com.github.rfresh2.fastutil-plugin")
+    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
 }
 
 fun addModule(name: String) {

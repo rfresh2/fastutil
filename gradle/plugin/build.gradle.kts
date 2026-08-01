@@ -8,7 +8,7 @@ repositories {
 }
 
 gradlePlugin {
-    val fastutilPlugin by plugins.creating {
+    val fastutilPlugin = plugins.create("fastutilPlugin") {
         id = "com.github.rfresh2.fastutil-plugin"
         implementationClass = "FastutilSettingsPlugin"
         displayName = "Fastutil plugin"

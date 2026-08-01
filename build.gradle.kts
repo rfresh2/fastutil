@@ -3,7 +3,7 @@ import java.util.*
 val props = Properties()
 file("build.properties").inputStream().use { props.load(it) }
 
-val release: String by properties
+val release = property("release") as String
 
 allprojects {
     group = "com.github.rfresh2.fastutil"
