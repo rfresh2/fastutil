@@ -16,7 +16,9 @@ plugins {
 }
 
 fun addModule(name: String) {
-    include(":modules:$name")
+    val path = ":modules:$name"
+    include(path)
+    project(path).projectDir.mkdirs()
 }
 
 

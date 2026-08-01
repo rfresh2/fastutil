@@ -18,7 +18,11 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
 
     rootProject.subprojects
-        .filter { it.path.startsWith(":modules:") && it.childProjects.isEmpty() }
+        .filter {
+            it.path.startsWith(":modules:") &&
+                it.childProjects.isEmpty() &&
+                it.name != "fastutil-bom"
+        }
         .forEach { testImplementation(it) }
 }
 
