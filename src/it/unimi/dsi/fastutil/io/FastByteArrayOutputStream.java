@@ -13,8 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package it.unimi.dsi.fastutil.io;
+
+import java.io.DataOutput;
+import java.io.IOException;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.nio.charset.Charset;
 
 import it.unimi.dsi.fastutil.bytes.ByteArrays;
 
@@ -30,7 +36,7 @@ import it.unimi.dsi.fastutil.bytes.ByteArrays;
  *
  * @author Sebastiano Vigna
  */
-public class FastByteArrayOutputStream extends MeasurableOutputStream implements RepositionableStream {
+public class FastByteArrayOutputStream extends MeasurableOutputStream implements RepositionableStream, ObjectOutput {
 
 	/** The array backing the output stream. */
 	public static final int DEFAULT_INITIAL_CAPACITY = 16;
@@ -42,7 +48,7 @@ public class FastByteArrayOutputStream extends MeasurableOutputStream implements
 	public int length;
 
 	/** The current writing position. */
-	private int position;
+	protected int position;
 
 	/** Creates a new array output stream with an initial capacity of {@link #DEFAULT_INITIAL_CAPACITY} bytes. */
 	public FastByteArrayOutputStream() {
@@ -121,5 +127,124 @@ public class FastByteArrayOutputStream extends MeasurableOutputStream implements
 	public void write(final byte[] b) {
 		// Only to force no exception
 		write(b, 0, b.length);
+	}
+
+	/** @see java.io.ByteArrayOutputStream#toString(Charset) */
+	public String toString(final Charset charset) {
+		return new String(array, 0, length, charset);
+	}
+
+	/** @see java.io.ByteArrayOutputStream#writeTo(OutputStream) */
+	public synchronized void writeTo(final OutputStream out) throws IOException {
+		out.write(array, 0, length);
+	}
+
+
+	@Override
+	public void writeBoolean(final boolean v) {
+		write(v?1:0);
+	}
+
+	@Override
+	public void writeByte(final int v) {
+		write(v);
+	}
+
+	@Override
+	public void writeShort(final int v) {
+		write(v >> 8);
+		write(v);
+	}
+
+	@Override
+	public void writeChar(final int v) {
+		write(v >> 8);
+		write(v);
+	}
+
+	@Override
+	public void writeInt(final int v) {
+		write(v >> 24);
+		write(v >> 16);
+		write(v >> 8);
+		write(v);
+	}
+
+	@Override
+	public void writeLong(final long v) {
+		writeInt((int)(v >> 32));
+		writeInt((int) v);
+	}
+
+	@Override
+	public void writeFloat(final float v) {
+		writeInt(Float.floatToIntBits(v));
+	}
+
+	@Override
+	public void writeDouble(final double v) {
+		writeLong(Double.doubleToLongBits(v));
+	}
+
+	/**
+	 * @deprecated This method is dangerous as it discards the high byte of every character. For UTF-8, use {@link #writeUTF(String)} or {@link #write(byte[]) @code write(s.getBytes(UTF_8))}.
+	 * @see java.io.DataOutputStream#writeBytes(String)
+	 */
+	@Deprecated
+	@Override
+	public void writeBytes(final String s) {
+		for (int i = 0, len = s.length(); i < len; i++){
+			write((byte)s.charAt(i));
+		}
+	}
+
+	@Override
+	public void writeChars(final String s) {
+		for (int i = 0, len = s.length(); i < len; i++){
+			final int v = s.charAt(i);
+			writeChar(v);
+		}
+	}
+
+	@Override
+	public void writeUTF (final String s) {
+		final int savePos = position;
+		writeShort(0);// len place holder
+		for (int i = 0, len = s.length(); i < len; i++){
+			writeUtf8Char(s.charAt(i));
+			if (position - savePos > 0xFF_FF + 2){
+				length = position = savePos;// rollback
+				throw new IllegalArgumentException(String.format("UTF encoded string too long: %d: %s", Integer.valueOf(s.length()), s.substring(0, 99)));
+			}
+		}
+		final int len = position - savePos - 2;
+		array[savePos] = (byte)(len >> 8);
+		array[savePos+1] = (byte)len;
+	}
+
+	/** @see java.io.DataOutputStream#writeUTF(String,DataOutput) */
+	public int writeUtf8Char(final char c) {
+		if (c != 0 && c < 0x80){
+			write(c);
+			return 1;
+		} else if (c >= 0x800){
+			write(0xE0 | c >> 12 & 0x0F);
+			write(0x80 | c >> 6  & 0x3F);
+			write(0x80 | c       & 0x3F);
+			return 3;
+		} else {
+			write(0xC0 | c >> 6 & 0x1F);
+			write(0x80 | c      & 0x3F);
+			return 2;
+		}
+	}
+
+	/// not efficient! Only added to support custom {@link java.io.Externalizable}
+	@Override
+	public void writeObject(final Object obj) throws IOException {
+		try (ObjectOutputStream oout = new ObjectOutputStream(this)){
+			oout.writeObject(obj);
+			oout.flush();
+		}
 	}
 }

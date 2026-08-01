@@ -26,6 +26,7 @@ import it.unimi.dsi.fastutil.objects.ObjectSet;
 import it.unimi.dsi.fastutil.objects.ObjectIterator;
 #endif
 
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.Map;
 
@@ -317,16 +318,34 @@ public interface MAP KEY_VALUE_GENERIC extends FUNCTION KEY_VALUE_GENERIC, Map<K
 
 	// Defaultable methods
 
-	@Override
-	default void forEach(final java.util.function.BiConsumer<? super KEY_GENERIC_CLASS, ? super VALUE_GENERIC_CLASS> consumer) {
+#if KEYS_PRIMITIVE || VALUES_PRIMITIVE
+	/** Performs the given action for each entry in this map until 
+	 * all entries have been processed or the action throws an exception. 
+	 *
+	 * <p>This default implementation just delegates to {@code forEach} on the
+	 * type-specific entry set, taking care of using {@code fastForEach} if available. 
+	 *
+	 * @see Map#forEach(java.util.function.BiConsumer)
+	 */
+	default void forEach(final PACKAGE.KEY_VALUE_BICONSUMER KEY_VALUE_SUPER_GENERIC consumer) {
 		final ObjectSet<MAP.Entry KEY_VALUE_GENERIC> entrySet = ENTRYSET();
-		final Consumer<MAP.Entry KEY_VALUE_GENERIC> wrappingConsumer = (entry) -> consumer.accept(KEY2OBJ(entry.ENTRY_GET_KEY()), VALUE2OBJ(entry.ENTRY_GET_VALUE()));
+		final Consumer<MAP.Entry KEY_VALUE_GENERIC> wrappingConsumer = (entry) -> consumer.accept(entry.ENTRY_GET_KEY(), entry.ENTRY_GET_VALUE());
 		if (entrySet instanceof FastEntrySet) {
 			((FastEntrySet KEY_VALUE_GENERIC)entrySet).fastForEach(wrappingConsumer);
 		} else {
 			entrySet.forEach(wrappingConsumer);
 		}
 	}
+
+	/** {@inheritDoc}
+	 * <p>This default implementation just delegates to the corresponding {@link Map} method.
+	 * @deprecated Please use the corresponding type-specific method instead. */
+	@Deprecated
+	@Override
+	default void forEach(final BiConsumer<? super KEY_GENERIC_CLASS, ? super VALUE_GENERIC_CLASS> action) {
+		Map.super.forEach(action);
+	}
+#endif
 
 
 	/** Returns the value to which the specified key is mapped, or the {@code defaultValue} if this
@@ -340,7 +359,7 @@ public interface MAP KEY_VALUE_GENERIC extends FUNCTION KEY_VALUE_GENERIC, Map<K
 	 * @see java.util.Map#getOrDefault(Object, Object)
 	 * @since 8.0.0
 	 */
-	@Override	
+	@Override
 	default VALUE_GENERIC_TYPE getOrDefault(final KEY_TYPE key, final VALUE_GENERIC_TYPE defaultValue) {
 		final VALUE_GENERIC_TYPE v;
 		return ((v = GET_VALUE(key)) != defaultReturnValue() || containsKey(key)) ? v : defaultValue;
@@ -437,7 +456,7 @@ public interface MAP KEY_VALUE_GENERIC extends FUNCTION KEY_VALUE_GENERIC, Map<K
 	 * return {@code null}. If such a behavior is needed, please use the corresponding <em>nullable</em> version.
 	 *
 	 * @apiNote all {@code computeIfAbsent()} methods have a different logic based on the argument;
-	 * no delegation is performed, contrarily to other superficially similar 
+	 * no delegation is performed, contrarily to other superficially similar
 	 * methods such as {@link java.util.Iterator#forEachRemaining} or {@link java.util.List#replaceAll}.
 	 *
 	 * @param key key with which the specified value is to be associated.
@@ -513,7 +532,7 @@ public interface MAP KEY_VALUE_GENERIC extends FUNCTION KEY_VALUE_GENERIC, Map<K
 	 * method, it is possible to avoid adding a key by having {@code containsKey()} return {@code false} for that key.
 	 *
 	 * @apiNote all {@code computeIfAbsent()} methods have a different logic based on the argument;
-	 * no delegation is performed, contrarily to other superficially similar 
+	 * no delegation is performed, contrarily to other superficially similar
 	 * methods such as {@link java.util.Iterator#forEachRemaining} or {@link java.util.List#replaceAll}.
 	 *
 	 * @param key key with which the specified value is to be associated.
@@ -558,7 +577,6 @@ public interface MAP KEY_VALUE_GENERIC extends FUNCTION KEY_VALUE_GENERIC, Map<K
 	 * @see java.util.Map#computeIfPresent(Object, java.util.function.BiFunction)
 	 * @since 8.0.0
 	 */
-
 	default VALUE_GENERIC_TYPE COMPUTE_IF_PRESENT(final KEY_GENERIC_TYPE key, final java.util.function.BiFunction<? super KEY_GENERIC_CLASS, ? super VALUE_GENERIC_CLASS, ? extends VALUE_GENERIC_CLASS> remappingFunction) {
 		java.util.Objects.requireNonNull(remappingFunction);
 

@@ -118,7 +118,6 @@ public final class SORTED_SETS {
 	SUPPRESS_WARNINGS_KEY_RAWTYPES
 	public static final EmptySet EMPTY_SET = new EmptySet();
 
-#if KEYS_REFERENCE
 	/** Returns an empty sorted set (immutable). It is serializable and cloneable.
 	 *
 	 * <p>This method provides a typesafe access to {@link #EMPTY_SET}.
@@ -128,7 +127,6 @@ public final class SORTED_SETS {
 	public static KEY_GENERIC SORTED_SET KEY_GENERIC emptySet() {
 		return EMPTY_SET;
 	}
-#endif
 
 	/** A class representing a singleton sorted set.
 	 *

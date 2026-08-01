@@ -19,8 +19,6 @@ package it.unimi.dsi.fastutil.io;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.IOException;
-
 import org.junit.Test;
 
 public class FastByteArrayOutputStreamTest {
@@ -28,7 +26,7 @@ public class FastByteArrayOutputStreamTest {
 	@SuppressWarnings("resource")
 	@Test
 	public void testWrite() {
-		FastByteArrayOutputStream fbaos = new FastByteArrayOutputStream();
+		final FastByteArrayOutputStream fbaos = new FastByteArrayOutputStream();
 		fbaos.write(1);
 		fbaos.write(2);
 		assertEquals(1, fbaos.array[0]);
@@ -51,13 +49,13 @@ public class FastByteArrayOutputStreamTest {
 
 	@SuppressWarnings("resource")
 	@Test
-	public void testWriteArray() throws IOException {
+	public void testWriteArray() {
 		FastByteArrayOutputStream fbaos = new FastByteArrayOutputStream();
 		fbaos.write(1);
 		fbaos.write(2);
 		fbaos.write(3);
 
-		byte[] a = new byte[14];
+		final byte[] a = new byte[14];
 		for(int i = 0; i < 14; i++) a[i] = (byte)(i + 10);
 		fbaos.write(a);
 		assertEquals(17, fbaos.length);
@@ -100,7 +98,7 @@ public class FastByteArrayOutputStreamTest {
 	@SuppressWarnings("resource")
 	@Test
 	public void testPositionWrite() {
-		FastByteArrayOutputStream fbaos = new FastByteArrayOutputStream();
+		final FastByteArrayOutputStream fbaos = new FastByteArrayOutputStream();
 		fbaos.position(1);
 		fbaos.write(1);
 		assertEquals(2, fbaos.length);
@@ -109,7 +107,7 @@ public class FastByteArrayOutputStreamTest {
 	@SuppressWarnings("resource")
 	@Test
 	public void testPositionWrite2() {
-		FastByteArrayOutputStream fbaos = new FastByteArrayOutputStream();
+		final FastByteArrayOutputStream fbaos = new FastByteArrayOutputStream();
 		fbaos.position(fbaos.array.length + 2);
 		fbaos.write(1);
 	}

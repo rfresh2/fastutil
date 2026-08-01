@@ -20,29 +20,34 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 
-/** Lightweight, unsynchronized output stream buffering class with
- *  {@linkplain MeasurableStream measurability} and
- *  {@linkplain RepositionableStream repositionability}.
+/**
+ * Lightweight, unsynchronized output stream buffering class with {@linkplain MeasurableStream
+ * measurability}, {@linkplain RepositionableStream repositionability}, and built-in
+ * {@link java.io.ObjectOutput} support.
  *
- * <p>This class provides buffering for output streams, but it does so with
- * purposes and an internal logic that are radically different from the ones
- * adopted in {@link java.io.BufferedOutputStream}. The main features follow.
+ * <p>
+ * This class provides buffering for output streams, but it does so with purposes and an internal
+ * logic that are radically different from the ones adopted in {@link java.io.BufferedOutputStream}.
+ * The main features follow.
  *
  * <ul>
- * <li><p>All methods are unsychronized.
+ * <li>
+ * <p>
+ * All methods are unsychronized.
  *
- * <li><p>As an additional feature, this class implements the {@link
- * RepositionableStream} and {@link MeasurableStream} interfaces.
- * An instance of this class will try to cast
- * the underlying byte stream to a {@link RepositionableStream} and to fetch by
- * reflection the {@link java.nio.channels.FileChannel} underlying the given
- * output stream, in this order. If either reference can be successfully
- * fetched, you can use {@link #position(long)} to reposition the stream.
- * Much in the same way, an instance of this class will try to cast the
- * the underlying byte stream to a {@link MeasurableStream}, and if this
- * operation is successful, or if a {@link java.nio.channels.FileChannel} can
- * be detected, then {@link #position()} and {@link #length()} will work as expected.
+ * <li>
+ * <p>
+ * As an additional feature, this class implements the {@link RepositionableStream} and
+ * {@link MeasurableStream} interfaces. An instance of this class will try to cast the underlying
+ * byte stream to a {@link RepositionableStream} and to fetch by reflection the
+ * {@link java.nio.channels.FileChannel} underlying the given output stream, in this order. If
+ * either reference can be successfully fetched, you can use {@link #position(long)} to reposition
+ * the stream. Much in the same way, an instance of this class will try to cast the the underlying
+ * byte stream to a {@link MeasurableStream}, and if this operation is successful, or if a
+ * {@link java.nio.channels.FileChannel} can be detected, then {@link #position()} and
+ * {@link #length()} will work as expected.
  * </ul>
+ *
  * @since 4.4
  */
 

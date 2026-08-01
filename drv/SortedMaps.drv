@@ -88,7 +88,7 @@ public final class SORTED_MAPS {
 		public KEY_COMPARATOR KEY_SUPER_GENERIC comparator() { return null; }
 
 		@Override
-		public ObjectSortedSet<MAP.Entry KEY_VALUE_GENERIC> ENTRYSET() { return ObjectSortedSets.EMPTY_SET; }
+		public ObjectSortedSet<MAP.Entry KEY_VALUE_GENERIC> ENTRYSET() { return ObjectSortedSets.emptySet(); }
 
 #if KEYS_PRIMITIVE || VALUES_PRIMITIVE
 		/** {@inheritDoc}
@@ -98,11 +98,11 @@ public final class SORTED_MAPS {
 		/** {@inheritDoc} */
 #endif
 		@Override
-		public ObjectSortedSet<Map.Entry<KEY_GENERIC_CLASS, VALUE_GENERIC_CLASS>> entrySet() { return ObjectSortedSets.EMPTY_SET; }
+		public ObjectSortedSet<Map.Entry<KEY_GENERIC_CLASS, VALUE_GENERIC_CLASS>> entrySet() { return ObjectSortedSets.emptySet(); }
 
 		SUPPRESS_WARNINGS_KEY_UNCHECKED
 		@Override
-		public SORTED_SET KEY_GENERIC keySet() { return SORTED_SETS.EMPTY_SET; }
+		public SORTED_SET KEY_GENERIC keySet() { return SORTED_SETS.emptySet(); }
 
 		SUPPRESS_WARNINGS_KEY_VALUE_UNCHECKED
 		@Override

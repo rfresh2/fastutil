@@ -82,7 +82,7 @@ public final class MAPS {
 			@Override
 			public ObjectIterator<MAP.Entry KEY_VALUE_GENERIC> iterator() { return ((MAP.FastEntrySet KEY_VALUE_GENERIC)entries).fastIterator(); }
 			@Override
-			public ObjectSpliterator<MAP.Entry KEY_VALUE_GENERIC> spliterator() { return entries.spliterator(); } 
+			public ObjectSpliterator<MAP.Entry KEY_VALUE_GENERIC> spliterator() { return entries.spliterator(); }
 			@Override
 			public void forEach(final Consumer<? super MAP.Entry KEY_VALUE_GENERIC> consumer) { ((MAP.FastEntrySet KEY_VALUE_GENERIC)entries).fastForEach(consumer); }
 		} : entries;
@@ -112,6 +112,12 @@ public final class MAPS {
 #if KEYS_PRIMITIVE || VALUES_PRIMITIVE
 		@Override
 		public VALUE_GENERIC_TYPE getOrDefault(final KEY_TYPE key, final VALUE_GENERIC_TYPE defaultValue) { return defaultValue; }
+
+		@Override
+		public void forEach(final PACKAGE.KEY_VALUE_BICONSUMER KEY_VALUE_SUPER_GENERIC consumer) { }
+#else
+		@Override
+		public void forEach(final java.util.function.BiConsumer KEY_VALUE_SUPER_GENERIC consumer) { }
 #endif
 
 #if VALUES_PRIMITIVE
@@ -126,18 +132,13 @@ public final class MAPS {
 		public void putAll(final Map<? extends KEY_GENERIC_CLASS, ? extends VALUE_GENERIC_CLASS> m) { throw new UnsupportedOperationException(); }
 
 		@Override
-		public ObjectSet<MAP.Entry KEY_VALUE_GENERIC> ENTRYSET() { return ObjectSets.EMPTY_SET; }
-
-		SUPPRESS_WARNINGS_KEY_UNCHECKED
-		@Override
-		public SET KEY_GENERIC keySet() { return SETS.EMPTY_SET; }
-
-		SUPPRESS_WARNINGS_VALUE_UNCHECKED
-		@Override
-		public VALUE_COLLECTION VALUE_GENERIC values() { return VALUE_SETS.EMPTY_SET; }
+		public ObjectSet<MAP.Entry KEY_VALUE_GENERIC> ENTRYSET() { return ObjectSets.emptySet(); }
 
 		@Override
-		public void forEach(final java.util.function.BiConsumer<? super KEY_GENERIC_CLASS, ? super VALUE_GENERIC_CLASS> consumer) { }
+		public SET KEY_GENERIC keySet() { return SETS.emptySet(); }
+
+		@Override
+		public VALUE_COLLECTION VALUE_GENERIC values() { return VALUE_SETS.emptySet(); }
 
 		@Override
 		public Object clone() { return EMPTY_MAP; }
@@ -201,7 +202,7 @@ public final class MAPS {
 		 * @deprecated Please use the corresponding type-specific method instead. */
 		@Deprecated
 		@Override
-		public boolean containsValue(final Object ov) { return VALUE_EQUALS(VALUE_OBJ2TYPE(ov), value); }
+		public boolean containsValue(final Object ov) { return ov != null && VALUE_EQUALS(VALUE_OBJ2TYPE(ov), value); }
 #endif
 
 		@Override
@@ -355,8 +356,12 @@ public final class MAPS {
 		@Override
 		public VALUE_GENERIC_TYPE getOrDefault(final KEY_TYPE key, final VALUE_GENERIC_TYPE defaultValue) { synchronized(sync) { return map.getOrDefault(key, defaultValue); } }
 
-		@Override
-		public void forEach(final java.util.function.BiConsumer<? super KEY_GENERIC_CLASS, ? super VALUE_GENERIC_CLASS> action) { synchronized (sync) { map.forEach(action); } }
+        @Override
+#if KEYS_PRIMITIVE || VALUES_PRIMITIVE
+		public void forEach(final PACKAGE.KEY_VALUE_BICONSUMER KEY_VALUE_SUPER_GENERIC action) { synchronized (sync) { map.forEach(action); } }
+#else
+		public void forEach(final java.util.function.BiConsumer KEY_VALUE_SUPER_GENERIC action) { synchronized (sync) { map.forEach(action); } }
+#endif
 
 		@Override
 		public void replaceAll(final java.util.function.BiFunction<? super KEY_GENERIC_CLASS, ? super VALUE_GENERIC_CLASS, ? extends VALUE_GENERIC_CLASS> function) { synchronized (sync) { map.replaceAll(function); } }
@@ -561,7 +566,11 @@ public final class MAPS {
 #endif
 
 		@Override
-		public void forEach(final java.util.function.BiConsumer<? super KEY_GENERIC_CLASS, ? super VALUE_GENERIC_CLASS> action) { map.forEach(action); }
+#if KEYS_PRIMITIVE || VALUES_PRIMITIVE
+		public void forEach(final PACKAGE.KEY_VALUE_BICONSUMER KEY_VALUE_SUPER_GENERIC action) { map.forEach(action); }
+#else
+        public void forEach(final java.util.function.BiConsumer KEY_VALUE_SUPER_GENERIC action) { map.forEach(action); }
+#endif
 
 		@Override
 		public void replaceAll(final java.util.function.BiFunction<? super KEY_GENERIC_CLASS, ? super VALUE_GENERIC_CLASS, ? extends VALUE_GENERIC_CLASS> function) { throw new UnsupportedOperationException(); }

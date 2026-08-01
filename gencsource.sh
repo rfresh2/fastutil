@@ -58,7 +58,7 @@ if [[ "${rem:0:1}" == "2" ]]; then
     root=$rem2
 fi
 
-if [[ "$class" == *Pair ]]; then
+if [[ "$class" == *Pair || "$class" == *BiConsumer ]]; then
     rem2=${rem##[A-Z]+([a-z])}
     valuelen=$(( ${#rem} - ${#rem2} ))
     VALUE_TYPE_CAP=${rem:0:$valuelen}
@@ -290,12 +290,14 @@ fi)\
 "#define KEY_VALUE_EXTENDS_GENERIC <? extends K, ? extends V>\n"\
 "#define KEY_GENERIC_VALUE_EXTENDS_GENERIC <K, ? extends V>\n"\
 "#define KEY_SUPER_GENERIC_VALUE_EXTENDS_GENERIC <? super K, ? extends V>\n"\
+"#define KEY_VALUE_SUPER_GENERIC <? super K, ? super V>\n"\
 "#else\n"\
 "#define KEY_VALUE_GENERIC <K>\n"\
 "#define KEY_VALUE_GENERIC_DIAMOND <>\n"\
 "#define KEY_VALUE_EXTENDS_GENERIC <? extends K>\n"\
 "#define KEY_GENERIC_VALUE_EXTENDS_GENERIC <K>\n"\
 "#define KEY_SUPER_GENERIC_VALUE_EXTENDS_GENERIC <? super K>\n"\
+"#define KEY_VALUE_SUPER_GENERIC <? super K>\n"\
 "#endif\n"\
 "#else\n"\
 "#if VALUES_REFERENCE\n"\
@@ -304,12 +306,14 @@ fi)\
 "#define KEY_VALUE_EXTENDS_GENERIC <? extends V>\n"\
 "#define KEY_GENERIC_VALUE_EXTENDS_GENERIC <? extends V>\n"\
 "#define KEY_SUPER_GENERIC_VALUE_EXTENDS_GENERIC <? extends V>\n"\
+"#define KEY_VALUE_SUPER_GENERIC <? super V>\n"\
 "#else\n"\
 "#define KEY_VALUE_GENERIC\n"\
 "#define KEY_VALUE_GENERIC_DIAMOND\n"\
 "#define KEY_VALUE_EXTENDS_GENERIC\n"\
 "#define KEY_GENERIC_VALUE_EXTENDS_GENERIC\n"\
 "#define KEY_SUPER_GENERIC_VALUE_EXTENDS_GENERIC\n"\
+"#define KEY_VALUE_SUPER_GENERIC\n"\
 "#endif\n"\
 "#endif\n"\
 \
@@ -370,6 +374,7 @@ fi)\
 "#define INDIRECT_PRIORITY_QUEUE ${TYPE_STD[$k]}IndirectPriorityQueue\n"\
 "#define INDIRECT_DOUBLE_PRIORITY_QUEUE ${TYPE_STD[$k]}IndirectDoublePriorityQueue\n"\
 "#define KEY_CONSUMER ${TYPE_STD[$k]}Consumer\n"\
+"#define KEY_VALUE_BICONSUMER ${TYPE_CAP2[$k]}${TYPE_CAP2[$v]}BiConsumer\n"\
 "#define KEY_PREDICATE ${TYPE_STD[$k]}Predicate\n"\
 "#define KEY_UNARY_OPERATOR ${TYPE_STD[$k]}UnaryOperator\n"\
 "#define KEY_BINARY_OPERATOR ${TYPE_STD[$k]}BinaryOperator\n"\

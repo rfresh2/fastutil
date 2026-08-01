@@ -57,6 +57,10 @@ fun getCoreIncludes(): Set<String> {
         ))
         for (mapType in Type.TYPES) {
             includes.add("$pkg/${cType}2${mapType.capitalised()}Function.java")
+            if (type != Type.REFERENCE && mapType != Type.REFERENCE &&
+                (type != Type.OBJECT || mapType != Type.OBJECT)) {
+                includes.add("$pkg/${cType}${mapType.capitalised()}BiConsumer.java")
+            }
         }
     }
     return includes

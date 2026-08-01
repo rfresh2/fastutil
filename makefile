@@ -207,6 +207,11 @@ $(CONSUMERS): drv/Consumer.drv; ./gencsource.sh $< $@ >$@
 
 CSOURCES += $(CONSUMERS)
 
+BICONSUMERS := $(foreach k,$(TYPE_NOREF), $(foreach v,$(TYPE_NOREF), $(if $(and $(findstring $(k),Object), $(findstring $(v),Object)), , $(GEN_SRCDIR)/$(PKG_PATH)/$(PACKAGE_$(k))/$(k)$(v)BiConsumer.c)))
+$(BICONSUMERS): drv/BiConsumer.drv; ./gencsource.sh $< $@ >$@
+
+CSOURCES += $(BICONSUMERS)
+
 PREDICATES := $(foreach k,$(TYPE_NOOBJ), $(GEN_SRCDIR)/$(PKG_PATH)/$(PACKAGE_$(k))/$(k)Predicate.c)
 $(PREDICATES): drv/Predicate.drv; ./gencsource.sh $< $@ >$@
 

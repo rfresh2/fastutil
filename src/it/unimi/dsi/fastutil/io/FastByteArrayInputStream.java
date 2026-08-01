@@ -13,20 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package it.unimi.dsi.fastutil.io;
 
-/** Simple, fast and repositionable byte-array input stream.
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.UTFDataFormatException;
+import java.io.UncheckedIOException;
+
+/**
+ * Simple, fast and repositionable byte-array input stream with built-in {@link java.io.ObjectInput}
+ * support.
  *
- * <p><strong>Warning</strong>: this class implements the correct semantics
- * of {@link #read(byte[], int, int)} as described in {@link java.io.InputStream}.
- * The implementation given in {@link java.io.ByteArrayInputStream} is broken,
- * but it will never be fixed because it's too late.
+ * <p>
+ * <strong>Warning</strong>: this class implements the correct semantics of
+ * {@link #read(byte[], int, int)} as described in {@link java.io.InputStream}. The implementation
+ * given in {@link java.io.ByteArrayInputStream} is broken, but it will never be fixed because it's
+ * too late.
  *
  * @author Sebastiano Vigna
  */
-
-public class FastByteArrayInputStream extends MeasurableInputStream implements RepositionableStream {
+public class FastByteArrayInputStream extends MeasurableInputStream implements RepositionableStream, ObjectInput {
 
 	/** The array backing the input stream. */
 	public byte[] array;
@@ -38,7 +46,7 @@ public class FastByteArrayInputStream extends MeasurableInputStream implements R
 	public int length;
 
 	/** The current position as a distance from {@link #offset}. */
-	private int position;
+	protected int position;
 
 	/** The current mark as a position, or -1 if no mark exists. */
 	private int mark;
@@ -52,7 +60,7 @@ public class FastByteArrayInputStream extends MeasurableInputStream implements R
 	public FastByteArrayInputStream(final byte[] array, final int offset, final int length) {
 		this.array = array;
 		this.offset = offset;
-		this.length = length;
+		this.length = Math.min(length, array.length - offset);
 	}
 
 	/** Creates a new array input stream using a given array.
@@ -89,6 +97,7 @@ public class FastByteArrayInputStream extends MeasurableInputStream implements R
 
 	@Override
 	public long skip(long n) {
+		if (n <= 0) return 0;
 		if (n <= length - position) {
 			position += (int)n;
 			return n;
@@ -111,7 +120,7 @@ public class FastByteArrayInputStream extends MeasurableInputStream implements R
 	 */
 
 	@Override
-	public int read(final byte b[], final int offset, final int length) {
+	public int read(final byte[] b, final int offset, final int length) {
 		if (this.length == this.position) return length == 0 ? 0 : -1;
 		final int n = Math.min(length, this.length - this.position);
 		System.arraycopy(array, this.offset + this.position, b, offset, n);
@@ -132,5 +141,124 @@ public class FastByteArrayInputStream extends MeasurableInputStream implements R
 	@Override
 	public long length() {
 		return length;
+	}
+
+	@Override
+	public int read (final byte[] b) {
+		return read(b, 0, b.length);
+	}
+
+	public int peek() {
+		if (length <= position()) return -1;
+		return array[(int)(offset + position())] & 0xFF;
+	}
+
+
+	@Override
+	public void readFully (final byte[] b) {
+		read(b);
+	}
+
+	@Override
+	public void readFully (final byte[] b, final int off, final int len) {
+		read(b, off, len);
+	}
+
+	@Override
+	public int skipBytes (final int n) {
+		return (int) skip(n);
+	}
+
+	@Override
+	public boolean readBoolean () {
+		return read() != 0;
+	}
+
+	@Override
+	public byte readByte () {
+		return (byte) read();
+	}
+
+	@Override
+	public int readUnsignedByte () {
+		return read() & 0xFF;
+	}
+
+	@Override
+	public short readShort() {
+		return (short)((read() << 8)|(read() & 0xFF));
+	}
+
+	@Override
+	public int readUnsignedShort() {
+		return ((read() & 0xFF) << 8)|(read() & 0xFF);
+	}
+
+	@Override
+	public char readChar() {
+		return (char)(((read() & 0xFF) << 8)|(read() & 0xFF));
+	}
+
+	@Override
+	public int readInt() {
+		return read() << 24 | ((read() & 0xFF) << 16) | ((read() & 0xFF) << 8) | (read() & 0xFF);
+	}
+
+	@Override
+	public long readLong () {
+		return (long) readInt() << 32 | (readInt() & 0xFFFF_FFFFL);
+	}
+
+	@Override
+	public float readFloat () {
+		return Float.intBitsToFloat(readInt());
+	}
+
+	@Override
+	public double readDouble () {
+		return Double.longBitsToDouble(readLong());
+	}
+
+	@Override  @Deprecated
+	public String readLine () {
+		final StringBuilder sb = new StringBuilder(99);
+loop:
+		for (int c;;){
+			switch (c = read()){
+			case -1:
+				break loop;// eof
+
+			case '\n':
+				return sb.toString();
+			case '\r':
+				if (peek() == '\n'){
+					read();
+				}
+				return sb.toString();
+
+			default:
+				sb.append((char) c);
+			}
+		}
+		return sb.length() == 0 ? null : sb.toString();
+	}
+
+	@Override
+	public String readUTF () throws UTFDataFormatException {
+		try {
+			return available() > 0 ? DataInputStream.readUTF(this) : null;
+		} catch (final UTFDataFormatException badBinaryFormatting){
+			throw badBinaryFormatting;
+		} catch (final IOException e){
+			throw new UncheckedIOException("readUTF @ "+this, e);
+		}
+	}
+
+	/// not efficient! Only added to support custom {@link java.io.Externalizable}
+	@Override
+	public Object readObject () throws ClassNotFoundException, IOException {
+		try (ObjectInputStream ois = new ObjectInputStream(this)){
+			return ois.readObject();
+		}
 	}
 }
