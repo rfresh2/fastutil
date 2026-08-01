@@ -22,6 +22,7 @@ fun addModule(name: String) {
 
 addModule("core")
 addModule("io")
+include(":tests")
 
 for (type in Type.TYPES) {
     addModule("commons:$type-common")

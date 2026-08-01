@@ -24,6 +24,7 @@ subprojects {
                 "$pkg/${cType}ArraySet.java",
                 "$pkg/${cType}OpenCustomHashSet.java",
                 "$pkg/${cType}OpenHashSet.java",
+                "$pkg/${cType}OpenHashBigSet.java",
                 // Sorted
                 "$pkg/${cType}SortedSet.java",
                 "$pkg/${cType}SortedSets.java",

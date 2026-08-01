@@ -12,6 +12,9 @@ subprojects {
         if (type.parent() != null) {
             "api"(project(":modules:commons:${type.parent()}-common"))
         }
+        if (type in listOf(Type.BYTE, Type.CHAR, Type.INT, Type.LONG, Type.SHORT)) {
+            "api"(project(":modules:commons:object-common"))
+        }
     }
 
     configure<SourceSetContainer> {
@@ -41,6 +44,7 @@ subprojects {
                 "$pkg/${cType}BigListIterator.java",
                 "$pkg/${cType}ImmutableList.java",
                 "$pkg/${cType}Lists.java",
+                "$pkg/${cType}ArrayFrontCodedList.java",
                 "$pkg/${cType}BidirectionalIterator.java",
                 "$pkg/${cType}Iterator.java",
                 "$pkg/${cType}Stack.java",

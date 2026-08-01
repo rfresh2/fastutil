@@ -12,6 +12,9 @@ subprojects {
         if (type.parent() == Type.OBJECT) {
             "api"(project(":modules:big-lists:${type.parent()}-big-lists"))
         }
+        if (type in listOf(Type.BYTE, Type.CHAR, Type.INT, Type.LONG, Type.SHORT)) {
+            "api"(project(":modules:big-lists:object-big-lists"))
+        }
     }
 
     configure<SourceSetContainer> {
@@ -24,7 +27,10 @@ subprojects {
                 "$pkg/Abstract${cType}BigList.java",
                 "$pkg/${cType}BigList.java",
                 "$pkg/${cType}BigSpliterators.java",
-                "$pkg/${cType}BigListIterators.java"
+                "$pkg/${cType}BigListIterators.java",
+                "$pkg/${cType}BigArrayBigList.java",
+                "$pkg/${cType}BigLists.java",
+                "$pkg/${cType}ArrayFrontCodedBigList.java"
             )
         }
     }
