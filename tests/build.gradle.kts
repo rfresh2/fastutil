@@ -1,5 +1,13 @@
+import org.gradle.api.tasks.compile.JavaCompile
+
 plugins {
     java
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(21))
+    }
 }
 
 repositories {
@@ -18,8 +26,8 @@ sourceSets.test {
     java.setSrcDirs(listOf(rootProject.file("test")))
 }
 
-tasks.compileTestJava {
-    options.release.set(8)
+tasks.withType<JavaCompile>().configureEach {
+    options.release = 8
 }
 
 tasks.test {

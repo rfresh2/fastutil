@@ -1,3 +1,5 @@
+import org.gradle.api.tasks.compile.JavaCompile
+
 plugins {
     id("java-library")
     id("maven-publish")
@@ -9,8 +11,12 @@ java {
     withSourcesJar()
 
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(8))
+        languageVersion = JavaLanguageVersion.of(21)
     }
+}
+
+tasks.withType<JavaCompile>().configureEach {
+    options.release = 8
 }
 
 publishing {

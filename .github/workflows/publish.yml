@@ -3,9 +3,6 @@ name: fastutil Publish
 on:
   workflow_dispatch:
 
-env:
-  GRADLE_OPTS: "-Dorg.gradle.parallel=true -Dorg.gradle.daemon=false -Dorg.gradle.caching=true -Dorg.gradle.welcome=never"
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -17,8 +14,8 @@ jobs:
       - name: Setup JDK
         uses: actions/setup-java@v5
         with:
-          java-version: '8'
-          distribution: 'temurin'
+          java-version: 21
+          distribution: temurin
 
       - name: Elevate wrapper permissions
         run: chmod +x ./gradlew

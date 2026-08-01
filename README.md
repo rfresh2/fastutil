@@ -37,8 +37,7 @@ you can browse all available modules here: https://maven.2b2t.vc/#/releases/com/
 
 ## Build
 
-The build requires Make, Bash, and a C compiler/preprocessor. Gradle invokes
-the upstream Makefile to generate sources automatically.
+The build requires Make, Bash, and a C compiler/preprocessor
 
 ```shell
 ./gradlew build
