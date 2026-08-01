@@ -21,6 +21,7 @@ fun addModule(name: String) {
 
 
 addModule("fastutil-bom")
+addModule("fastutil-all")
 addModule("core")
 addModule("io")
 include(":tests")

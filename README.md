@@ -37,6 +37,14 @@ dependencies {
 }
 ```
 
+Alternatively, `fastutil-all` brings in every module transitively:
+
+```kotlin
+dependencies {
+    api("com.github.rfresh2.fastutil:fastutil-all:8.5.19")
+}
+```
+
 These modules are compiled and published with gradle (instead of ant)
 
 ## Maven

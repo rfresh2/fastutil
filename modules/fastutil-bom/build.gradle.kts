@@ -6,6 +6,7 @@ plugins {
 
 dependencies {
     constraints {
+        api(project(":modules:fastutil-all"))
         api(project(":modules:core"))
         api(project(":modules:io"))
 
